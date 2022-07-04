@@ -8,32 +8,16 @@ const questions = [
     message: "What do you want to do?",
     choices: [
       {
-        value: "1",
-        name: `${"1.".green} Create task`,
+        value: 1,
+        name: `${"1.".green} Search place`,
       },
       {
-        value: "2",
-        name: `${"2.".green} List tasks`,
+        value: 2,
+        name: `${"2.".green} Search history`,
       },
       {
-        value: "3",
-        name: `${"3.".green} list completed tasks`,
-      },
-      {
-        value: "4",
-        name: `${"4.".green} List pending tasks`,
-      },
-      {
-        value: "5",
-        name: `${"5.".green} Complete task`,
-      },
-      {
-        value: "6",
-        name: `${"6.".green} Delete task`,
-      },
-      {
-        value: "7",
-        name: `${"7.".green} Exit`,
+        value: 0,
+        name: `${"0.".green} Exit`,
       },
     ],
   },
@@ -79,75 +63,8 @@ const readInput = async (message) => {
   return description;
 };
 
-const listOfTaskToDelete = async (tasks = []) => {
-  const choices = tasks.map((task, index) => {
-    return {
-      value: task.id,
-      name: `${(index + 1 + ".").green} ${task.description}`,
-    };
-  });
-  const tasksList = [
-    {
-      type: "list",
-      name: "deleteOption",
-      message: "Which task would you like to delete?",
-      choices,
-    },
-  ];
-  const { deleteOption } = await inquirer.prompt(tasksList);
-  return deleteOption;
-};
-
-const confirmTaskDeletion = async (id) => {
-  const tasksList = [
-    {
-      type: "confirm",
-      name: "confirmDeletion",
-      message: `Are you sure you want to delete the task ${id}?`,
-    },
-  ];
-  const { confirmDeletion } = await inquirer.prompt(tasksList);
-  return confirmDeletion;
-};
-
-const listOfTaskToComplete = async (tasks = []) => {
-  const choices = tasks.map((task, index) => {
-    return {
-      value: task.id,
-      name: `${(index + 1 + ".").green} ${task.description}`,
-      checked: task.completedOn,
-    };
-  });
-  const tasksList = [
-    {
-      type: "checkbox",
-      name: "completeOption",
-      message: "Which tasks would you like to complete?",
-      choices,
-    },
-  ];
-  const { completeOption } = await inquirer.prompt(tasksList);
-  return completeOption;
-};
-
-const confirmTaskComplete = async () => {
-  const tasksList = [
-    {
-      type: "confirm",
-      name: "confirmDeletion",
-      message: "Are you sure you want to complete the selected tasks?",
-    },
-  ];
-  const { confirmDeletion } = await inquirer.prompt(tasksList);
-  return confirmDeletion;
-};
-
 export {
   inquirerMenu,
   pause,
   readInput,
-  listOfTaskToDelete,
-  confirmTaskDeletion,
-  listOfTaskToComplete,
-  confirmTaskComplete,
 };
