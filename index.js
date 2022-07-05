@@ -19,20 +19,29 @@ const main = async () => {
         const searchParam = await readInput("City: ");
         const places = await searches.city(searchParam);
         const selected = await listPlaces(places);
+        if (selected === "0") continue;
         const selectedPlace = places.find((place) => place.id === selected);
-        const weather = await searches.searchWeather(selectedPlace.lat, selectedPlace.lng);
+        searches.saveRecords(selectedPlace.name);
+        const weather = await searches.searchWeather(
+          selectedPlace.lat,
+          selectedPlace.lng
+        );
         console.log("\nCity information\n".green);
-        console.log('City: ', selectedPlace.name);
-        console.log('Lat: ', selectedPlace.lat);
-        console.log('Lng: ', selectedPlace.lng);
-        console.log('Temperature: ', weather.temp);
-        console.log('Conditions: ', weather.description);
-        console.log('Feels like: ', weather.feels_like);
-        console.log('Min: ', weather.temp_min);
-        console.log('Max: ', weather.temp_max);
+        console.log("City: ", selectedPlace.name);
+        console.log("Lat: ", selectedPlace.lat);
+        console.log("Lng: ", selectedPlace.lng);
+        console.log("Temperature: ", weather.temp);
+        console.log("Conditions: ", weather.description);
+        console.log("Feels like: ", weather.feels_like);
+        console.log("Min: ", weather.temp_min);
+        console.log("Max: ", weather.temp_max);
         break;
 
-      case 1:
+      case 2:
+        searches.capitalizedRecord.forEach((place, index) =>
+          console.log(`${(index + 1 + ".").green} ${place}`)
+        );
+        console.log();
         break;
 
       default:

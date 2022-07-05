@@ -1,12 +1,27 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import fs from "fs";
 dotenv.config();
+
+const dir = "./db";
+const file = `${dir}/records.json`;
 
 class Searches {
   record = [];
 
   constructor() {
-    //TODO: read DB if exist
+    this.readDB();
+  }
+
+  get capitalizedRecord() {
+    return this.record.map((place) => {
+      const placeToArray = place.split(" ");
+      for (let i = 0; i < placeToArray.length; i++) {
+        placeToArray[i] =
+          placeToArray[i][0].toUpperCase() + placeToArray[i].substr(1);
+      }
+      return placeToArray.join(" ");
+    });
   }
 
   get mapboxParams() {
@@ -50,6 +65,38 @@ class Searches {
       };
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  saveRecords(place = "") {
+    if (this.record.includes(place.toLocaleLowerCase())) return;
+    this.record.unshift(place.toLocaleLowerCase());
+    if (this.record.length >= 6) this.record.pop();
+    this.saveDB();
+  }
+
+  saveDB() {
+    const payload = {
+      record: this.record,
+    };
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      fs.writeFileSync(file, JSON.stringify(payload, null, 2));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  readDB() {
+    try {
+      if (!fs.existsSync(file)) return null;
+      const info = fs.readFileSync(file, { encoding: "utf-8" });
+      const converted = JSON.parse(info);
+      this.record = converted.record;
+    } catch (error) {
+      throw error;
     }
   }
 }
