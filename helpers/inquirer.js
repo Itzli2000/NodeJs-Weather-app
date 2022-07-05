@@ -63,8 +63,25 @@ const readInput = async (message) => {
   return description;
 };
 
-export {
-  inquirerMenu,
-  pause,
-  readInput,
+const listPlaces = async (places = []) => {
+  const choices = places.map((choice, index) => ({
+    value: choice.id,
+    name: `${index + 1} ${choice.name}`,
+  }));
+  choices.unshift({
+    value: "0",
+    name: "0. Cancel",
+  });
+  const questions = [
+    {
+      type: "list",
+      name: "placeId",
+      message: "Select the place:",
+      choices,
+    },
+  ];
+  const { placeId } = await inquirer.prompt(questions);
+  return placeId;
 };
+
+export { inquirerMenu, pause, readInput, listPlaces };
